@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AppPreloader } from "@/components/branding/AppPreloader";
 import "@fontsource/poppins/latin-400.css";
 import "@fontsource/poppins/latin-500.css";
 import "@fontsource/poppins/latin-600.css";
@@ -18,7 +19,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" data-scroll-behavior="smooth">
-      <body>{children}</body>
+      <body>
+        <AppPreloader>{children}</AppPreloader>
+      </body>
     </html>
   );
 }
