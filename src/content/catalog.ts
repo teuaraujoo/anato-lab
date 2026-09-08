@@ -27,6 +27,19 @@ export const catalog: readonly CatalogEntry[] = [
     structureCount: organelleIds.length,
     keywords: ["célula", "animal", "eucariótica", "organelas", "biologia"],
   },
+  {
+    id: "human-eye",
+    title: "Olho humano",
+    category: "Anatomia humana",
+    description:
+      "Descubra o caminho da luz e as estruturas que tornam a visão possível.",
+    href: "/olho",
+    image: "/catalog/olho-modelo.png",
+    imageAlt:
+      "Modelo 3D de um olho humano em corte, com suas estruturas internas visíveis.",
+    structureCount: 13,
+    keywords: ["olho", "visão", "córnea", "retina", "cristalino", "anatomia"],
+  },
 ];
 
 function normalizeSearch(value: string) {
