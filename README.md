@@ -1,6 +1,6 @@
 # Exploração 3D do corpo humano
 
-Projeto educacional que une programação, biologia e visualização 3D para tornar
+Projeto educacional que une tecnologia, biologia e visualização 3D para tornar
 o estudo do corpo humano mais acessível, interativo e visual.
 
 A primeira etapa é uma célula animal: um modelo que pode ser girado, ampliado
