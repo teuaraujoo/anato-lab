@@ -52,6 +52,23 @@ input:focus-visible {
   margin: 0 auto;
   padding: 0 44px;
 }
+.explorer-navigation {
+  padding-top: 24px;
+}
+.explorer-navigation a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #b2cacb;
+  font-size: 12px;
+}
+.explorer-navigation a:hover {
+  color: var(--accent);
+}
+.explorer-navigation + .page-intro {
+  padding-top: 20px;
+}
 .stage-badge > span {
   width: 5px;
   height: 5px;

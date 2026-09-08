@@ -5,15 +5,19 @@ import "@fontsource/poppins/latin-600.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Biologia Celular | Exploração Interativa",
-  description: "Uma exploração 3D interativa de uma célula animal.",
+  title: {
+    default: "Anatolab | Explore o corpo humano em 3D",
+    template: "%s | Anatolab",
+  },
+  description:
+    "Um acervo educacional para explorar o corpo humano em 3D. Comece pela célula animal e descubra suas estruturas e funções.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" data-scroll-behavior="smooth">
       <body>{children}</body>
     </html>
   );

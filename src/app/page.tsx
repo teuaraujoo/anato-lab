@@ -1,5 +1,5 @@
-import { CellExperience } from "@/components/cell/CellExperience";
+import { HomeCatalog } from "@/components/home/HomeCatalog";
 
 export default function Home() {
-  return <CellExperience />;
+  return <HomeCatalog />;
 }

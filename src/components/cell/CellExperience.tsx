@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import {
   Component,
   useEffect,
@@ -11,6 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import {
+  ArrowLeft,
   ArrowUpRight,
   Atom,
   Check,
@@ -285,7 +287,10 @@ export function CellExperience() {
       if (e.key === "Escape") useCellStore.getState().reset();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      useCellStore.getState().reset();
+    };
   }, []);
 
   return (
@@ -300,6 +305,11 @@ export function CellExperience() {
       >
         Ir para a lista de estruturas
       </a>
+      <nav className="explorer-navigation" aria-label="Navegação do explorador">
+        <Link href="/">
+          <ArrowLeft size={15} aria-hidden="true" /> Voltar ao acervo
+        </Link>
+      </nav>
       <div className="page-intro" id="explorador">
         <div>
           <p className="eyebrow">
