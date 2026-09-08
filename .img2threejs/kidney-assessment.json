@@ -1,0 +1,393 @@
+{
+  "targetName": "Rim humano em corte",
+  "sourceImage": "references/rim/rim-base-corte-tres-quartos.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "human kidney cutaway teaching model",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "organic",
+        "continuous-sculpt"
+      ],
+      "structureKind": [
+        "layered shell",
+        "branching hierarchy",
+        "repeated modules"
+      ],
+      "motionPotential": [
+        "whole-object transform",
+        "visibility",
+        "detachable teaching groups"
+      ],
+      "materialFamilies": [
+        "skin-like",
+        "mixed"
+      ],
+      "notes": "Didactic reconstruction, not clinical measurement. Main image shows seven pyramid profiles; posterior hidden regions remain inferred."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 2,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 12,
+        "microFeatureGroups": 5,
+        "materialLayers": 7,
+        "repetitionSystems": 2
+      },
+      "reasoning": [
+        "Continuous bean-shaped envelope with real depth and a medial hilum notch.",
+        "Seven observed tapered pyramid profiles and a branching collecting system make one primitive insufficient.",
+        "Twelve semantic selections require independent named groups while shared surfaces remain connected."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Complex organic layered cutaway with repeated pyramids and branching tubes. Preserve volume, anatomical grouping and lumen geometry, not merely front-view color regions."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "The references are generated illustrations, not calibrated orthographic photographs; dimensions must be labeled relative.",
+      "Do not assert anatomical laterality from the filenames. Keep vessel depth order grounded in anatomy.",
+      "Renal sinus is a space containing support tissue; do not manufacture a solid plug.",
+      "Material and projection applicability must be recorded before the construction spec can pass validation."
+    ],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 10,
+      "note": "Observed candidate details below. mapsTo names planned spec entries; validate those mappings against the authored component tree before marking detail-inventory complete.",
+      "details": [
+        {
+          "id": "capsule-cut-rim",
+          "kind": "bevel",
+          "componentId": "renal-capsule",
+          "observation": "Borda estreita arredondada no corte",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-capsule.localFeatures.capsule-cut-rim"
+        },
+        {
+          "id": "hilum-notch",
+          "kind": "hole",
+          "componentId": "renal-capsule",
+          "observation": "Concavidade medial que acomoda a passagem dos vasos",
+          "confidence": 0.95,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-capsule.localFeatures.hilum-notch"
+        },
+        {
+          "id": "cortical-band",
+          "kind": "contour",
+          "componentId": "renal-cortex",
+          "observation": "Faixa periférica salmão com espessura visível",
+          "confidence": 0.95,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-cortex.localFeatures.cortical-band"
+        },
+        {
+          "id": "cortical-speckle",
+          "kind": "stain",
+          "componentId": "renal-cortex",
+          "observation": "Variação pontilhada na face de corte; não representar glomérulos em escala macroscópica",
+          "confidence": 0.75,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-cortex.localFeatures.cortical-speckle"
+        },
+        {
+          "id": "pyramid-taper",
+          "kind": "contour",
+          "componentId": "renal-medulla",
+          "observation": "Bases amplas convergindo para ápices arredondados",
+          "confidence": 0.95,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-medulla.localFeatures.pyramid-taper"
+        },
+        {
+          "id": "pyramid-striation",
+          "kind": "ridge",
+          "componentId": "renal-medulla",
+          "observation": "Estriações longitudinais convergentes",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-medulla.localFeatures.pyramid-striation"
+        },
+        {
+          "id": "papilla-calyx-contact",
+          "kind": "seam",
+          "componentId": "renal-papillae",
+          "observation": "Ápices alojados nas aberturas dos cálices",
+          "confidence": 0.85,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-papillae.localFeatures.papilla-calyx-contact"
+        },
+        {
+          "id": "minor-calyx-mouth",
+          "kind": "hole",
+          "componentId": "minor-calyces",
+          "observation": "Borda clara aberta ao redor de cada ápice",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.minor-calyces.localFeatures.minor-calyx-mouth"
+        },
+        {
+          "id": "collector-forks",
+          "kind": "contour",
+          "componentId": "major-calyces",
+          "observation": "Junções ramificadas contínuas",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.major-calyces.localFeatures.collector-forks"
+        },
+        {
+          "id": "pelvis-taper",
+          "kind": "contour",
+          "componentId": "renal-pelvis",
+          "observation": "Transição do funil para o ureter",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-pelvis.localFeatures.pelvis-taper"
+        },
+        {
+          "id": "artery-lumen",
+          "kind": "hole",
+          "componentId": "renal-artery",
+          "observation": "Parede vermelha e abertura interna no vaso cortado",
+          "confidence": 0.95,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-artery.localFeatures.artery-lumen"
+        },
+        {
+          "id": "vein-lumen",
+          "kind": "hole",
+          "componentId": "renal-vein",
+          "observation": "Parede azul e abertura interna no vaso cortado",
+          "confidence": 0.95,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-vein.localFeatures.vein-lumen"
+        },
+        {
+          "id": "ureter-lumen",
+          "kind": "hole",
+          "componentId": "ureter",
+          "observation": "Extremidade inferior tubular aberta",
+          "confidence": 0.9,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.ureter.localFeatures.ureter-lumen"
+        },
+        {
+          "id": "sinus-fat",
+          "kind": "ridge",
+          "componentId": "renal-sinus",
+          "observation": "Tecido amarelo lobulado atrás do coletor",
+          "confidence": 0.8,
+          "evidenceRef": "full-object",
+          "mapsTo": "componentTree.renal-sinus.localFeatures.sinus-fat"
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0,
+      "proportions": {
+        "headUnit": 0,
+        "torso": 0,
+        "legs": 0,
+        "shoulderWidth": 0,
+        "hipWidth": 0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0,
+        "eyeSpacing": 0,
+        "noseBase": 0,
+        "mouthLine": 0,
+        "hairline": 0
+      },
+      "features": [],
+      "confidence": 0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "references/rim/rim-base-corte-tres-quartos.png"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "Didactic renal cutaway with continuous volume, connected collecting system and 12 selectable semantic regions.",
+      "Selection must remain legible without breaking contacts or washing out colors.",
+      "Browser screenshots in frontal, three-quarter, lateral and posterior views must support visual acceptance.",
+      "Home thumbnail must be captured from the validated runtime model, not an AI reference image."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Assessment from direct visual inspection; final construction spec and detail mapping are still pending. See docs/kidney.md for implementation scope and source links.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Rim humano em corte kidney renal pelvis calyces organic shell",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "ac4f0bc9028e34083dbb5d5531ae3df7699c8e7641d5f8e6d42e7492ea1be1d0"
+    },
+    "matches": [
+      {
+        "record_id": "core.topology-intent",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Geometry And Topology",
+        "key_path": null,
+        "score": 5.143858634031,
+        "snippets": [
+          "Topology intent classifies a surface as hard-surface blockout, subdivision-ready, low-poly prop, organic deformed mesh, or alpha-card cluster."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Geometry And Topology",
+            "key_path": null
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          }
+        ]
+      }
+    ]
+  }
+}

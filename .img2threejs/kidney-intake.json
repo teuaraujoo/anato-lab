@@ -1,0 +1,16 @@
+{
+  "reference": "references/rim/rim-base-corte-tres-quartos.png",
+  "analysis": "docs/kidney.md",
+  "assessment": ".img2threejs/kidney-assessment.json",
+  "suitability": "conditional",
+  "reason": "Silhueta e estruturas visíveis suficientes para um modelo didático. As imagens não são vistas calibradas nem estabelecem profundidade, medidas clínicas ou lateralidade exatas.",
+  "admission": {
+    "command": "forge/stage1_intake/check_reference_admission.py references/rim/rim-base-corte-tres-quartos.png",
+    "exitCode": 0,
+    "result": "ADMITTED",
+    "pHash": "17532757843244525776"
+  },
+  "constructionSpec": "pending",
+  "renderReview": "not-started",
+  "geometryImplemented": false
+}
