@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import styles from "./AppPreloader.module.css";
+import { PreloaderReadyContext } from "./PreloaderContext";
 
 type Phase = "loading" | "revealing" | "complete";
 const MAX_WAIT_MS = 4000;
@@ -113,7 +114,7 @@ export function AppPreloader({ children }: { children: ReactNode }) {
   }, [blocked]);
 
   return (
-    <>
+    <PreloaderReadyContext.Provider value={!blocked}>
       <noscript>
         <style>{"#anatolab-preloader { display: none !important; }"}</style>
       </noscript>
@@ -153,6 +154,6 @@ export function AppPreloader({ children }: { children: ReactNode }) {
           </button>
         </div>
       )}
-    </>
+    </PreloaderReadyContext.Provider>
   );
 }
