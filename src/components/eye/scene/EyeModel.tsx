@@ -67,7 +67,7 @@ function IrisFibers() {
     [],
   );
   return (
-    <Selectable id="iris">
+    <group name="iris-fibers">
       <group>
         {geometries.map((geometry, index) => (
           <mesh key={index} geometry={geometry}>
@@ -79,7 +79,7 @@ function IrisFibers() {
           </mesh>
         ))}
       </group>
-    </Selectable>
+    </group>
   );
 }
 
@@ -111,7 +111,7 @@ export function EyeModel() {
   );
   const opticDiscGeometry = useMemo(() => new CircleGeometry(0.34, 48), []);
   return (
-    <group rotation={[0.03, -0.07, 0]}>
+    <group name="eye-model" rotation={[0.03, -0.07, 0]}>
       <Selectable id="sclera">
         <mesh geometry={sclera}>
           <EyeMaterial
@@ -176,11 +176,11 @@ export function EyeModel() {
         <mesh geometry={irisGeometry} position={[0, 0, 2.03]}>
           <EyeMaterial id="iris" color="#a8c879" roughness={0.55} />
         </mesh>
+        <IrisFibers />
       </Selectable>
-      <IrisFibers />
       <Selectable id="pupil">
         <mesh geometry={pupilGeometry} position={[0, 0, 2.045]}>
-          <meshStandardMaterial color="#14242b" roughness={0.18} />
+          <EyeMaterial id="pupil" color="#14242b" roughness={0.18} />
         </mesh>
       </Selectable>
       <Selectable id="ciliary-body">

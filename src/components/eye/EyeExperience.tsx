@@ -17,6 +17,7 @@ import {
   Check,
   ChevronRight,
   Eye,
+  Expand,
   Focus,
   Layers3,
   MousePointer2,
@@ -211,6 +212,8 @@ function StructurePanel({
 }
 
 function ViewerToolbar() {
+  const exploded = useEyeStore((state) => state.exploded);
+  const toggleExploded = useEyeStore((state) => state.toggleExploded);
   const selected = useEyeStore((state) => state.selectedId);
   const isolated = useEyeStore((state) => state.isolatedId);
   const toggleIsolation = useEyeStore((state) => state.toggleIsolation);
@@ -231,6 +234,15 @@ function ViewerToolbar() {
         <span>Restaurar</span>
       </button>
       <span className="toolbar-divider" />
+      <button
+        className="tool-button"
+        onClick={toggleExploded}
+        aria-pressed={exploded}
+        title="Separação didática das estruturas; não representa suas posições anatômicas"
+      >
+        <Expand size={17} aria-hidden="true" />
+        <span>{exploded ? "Reunir" : "Separar"}</span>
+      </button>
       <button className="tool-button" onClick={focus} disabled={!selected}>
         <Focus size={17} aria-hidden="true" />
         <span>Aproximar</span>
@@ -259,6 +271,7 @@ export function EyeExperience() {
   const panelOpen = panelPreference ?? !compact;
   const panelTrigger = useRef<HTMLButtonElement>(null);
   const selectedId = useEyeStore((state) => state.selectedId);
+  const exploded = useEyeStore((state) => state.exploded);
   const hoveredId = useEyeStore((state) => state.hoveredId);
   const isolated = useEyeStore((state) => state.isolatedId);
   const current = hoveredId ?? selectedId;
@@ -287,7 +300,7 @@ export function EyeExperience() {
     };
   }, []);
   return (
-    <main ref={rootRef} className="atlas-page">
+    <main ref={rootRef} className="atlas-page separated-explorer">
       <a
         className="skip-link"
         href="#estruturas"
@@ -352,7 +365,11 @@ export function EyeExperience() {
               <span className="specimen-label">SISTEMA VISUAL</span>
               <span className="stage-badge">
                 <span />
-                {isolated ? "ESTRUTURA ISOLADA" : "VISÃO EM CORTE"}
+                {isolated
+                  ? "ESTRUTURA ISOLADA"
+                  : exploded
+                    ? "SEPARAÇÃO DIDÁTICA"
+                    : "VISÃO EM CORTE"}
               </span>
             </div>
             <div

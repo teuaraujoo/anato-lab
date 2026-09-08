@@ -60,6 +60,41 @@ function CameraController() {
       control.target.set(0, 0, 0);
       control.minDistance = 3;
       control.maxDistance = Math.max(24, distance * 1.7);
+      if (useEyeStore.getState().exploded) {
+        const model = scene.getObjectByName("eye-model");
+        if (model) {
+          model.updateWorldMatrix(true, true);
+          const box = new Box3().setFromObject(model);
+          if (!box.isEmpty()) {
+            const center = box.getCenter(new Vector3());
+            const direction = new Vector3(0.85, 0.22, 0.6).normalize();
+            const right = new Vector3()
+              .crossVectors(camera.up, direction)
+              .normalize();
+            const up = new Vector3().crossVectors(direction, right);
+            let fittedDistance = 0;
+            // Enquadra os cantos no campo de visão, sem afastar pela diagonal inteira.
+            for (const x of [box.min.x, box.max.x])
+              for (const y of [box.min.y, box.max.y])
+                for (const z of [box.min.z, box.max.z]) {
+                  const corner = new Vector3(x, y, z).sub(center);
+                  fittedDistance = Math.max(
+                    fittedDistance,
+                    Math.abs(corner.dot(right)) / Math.tan(horizontal) +
+                      corner.dot(direction),
+                    Math.abs(corner.dot(up)) / Math.tan(vertical) +
+                      corner.dot(direction),
+                  );
+                }
+            fittedDistance *= 1.12;
+            camera.position
+              .copy(center)
+              .add(direction.multiplyScalar(fittedDistance));
+            control.target.copy(center);
+            control.maxDistance = Math.max(24, fittedDistance * 2);
+          }
+        }
+      }
     } else if (last.focus !== focusVersion && id) {
       const object = scene.getObjectByName(id);
       if (object) {

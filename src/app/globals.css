@@ -254,7 +254,8 @@ h1 > span {
   background: #9be0c8;
   color: #0a2e28;
 }
-.kidney-page .tool-button[aria-pressed="true"]:hover {
+.kidney-page .tool-button[aria-pressed="true"]:hover,
+.separated-explorer .tool-button[aria-pressed="true"]:hover {
   background: #b5edd9;
 }
 .toolbar-divider {
@@ -684,7 +685,8 @@ h1 > span {
   .tool-button span {
     font-size: 10px;
   }
-  .kidney-page .tool-button {
+  .kidney-page .tool-button,
+  .separated-explorer .tool-button {
     flex-direction: column;
     gap: 6px;
     min-width: 58px;
