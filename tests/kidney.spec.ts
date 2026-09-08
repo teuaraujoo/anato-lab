@@ -146,4 +146,22 @@ test.describe("estado de interação do rim", () => {
       resetVersion: before.resetVersion,
     });
   });
+
+  test("separar limpa o isolamento e restaurar reúne as camadas", () => {
+    const before = useKidneyStore.getState();
+    before.select("renal-cortex");
+    before.toggleIsolation();
+    before.toggleExploded();
+    expect(useKidneyStore.getState()).toMatchObject({
+      selectedId: "renal-cortex",
+      isolatedId: null,
+      exploded: true,
+      resetVersion: before.resetVersion + 1,
+    });
+    before.toggleExploded();
+    expect(useKidneyStore.getState().exploded).toBe(false);
+    before.toggleExploded();
+    before.reset();
+    expect(useKidneyStore.getState().exploded).toBe(false);
+  });
 });
