@@ -1,134 +1,134 @@
-# Rim humano: contrato de desenvolvimento
+# Rim humano
 
 ## Estado atual
 
-A preparação do módulo está implementada. Existem tipos, conteúdo educativo,
-busca e estado de interação com testes. **Ainda não existem um modelo renderizado,
-a rota `/rim` ou um card na home.** Nenhuma imagem de referência será usada como
-se fosse uma captura da aplicação.
+A primeira versão está disponível em `/rim`, com modelo 3D procedural,
+12 regiões selecionáveis, conteúdo educativo e card na home. A miniatura
+`public/catalog/rim-modelo.png` é uma captura do Canvas da aplicação.
 
-## Referências locais
+O modelo é **didático e estilizado**, não um escaneamento ou uma malha clínica.
+As junções do sistema coletor e a continuidade das superfícies ainda precisam
+de refinamento. A avaliação geométrica não está integralmente aprovada.
 
-As sete imagens estão em `references/rim/`. Servem como referência artística,
-não como medidas clínicas ou imagens já convertidas em malhas 3D.
+## Organização
 
-| Arquivo                           | Uso na construção                             |
-| --------------------------------- | --------------------------------------------- |
-| `rim-base-corte-tres-quartos.png` | Referência principal de volume e corte        |
-| `rim-base-corte-interno.png`      | Distribuição das estruturas internas          |
-| `rim-base-sistema-coletor.png`    | Ramificações e transição para a pelve         |
-| `rim-base-hilo.png`               | Entrada e saída das estruturas na concavidade |
-| `rim-base.png`                    | Silhueta externa                              |
-| `rim-base-frontal.png`            | Comparação da silhueta                        |
-| `rim-base-posterior.png`          | Referência complementar da superfície externa |
+- `src/types/kidney.ts`: identificadores das 12 estruturas.
+- `src/content/kidney.ts`: textos, cores, relações, fontes e busca.
+- `src/store/kidneyStore.ts`: seleção, hover, isolamento e separação.
+- `src/components/kidney/KidneyExperience.tsx`: página e painel de estudo.
+- `src/components/kidney/KidneyScene.tsx`: Canvas, câmera e iluminação.
+- `src/components/kidney/scene/geometry.ts`: superfícies paramétricas e tubos.
+- `src/components/kidney/scene/materials.ts`: mapas procedurais determinísticos.
+- `src/components/kidney/scene/KidneyModel.tsx`: montagem e interação por região.
+- `src/app/rim/page.tsx`: rota e metadados.
+- `src/content/catalog.ts`: card, busca e inclusão automática no sitemap.
 
-As vistas não formam uma sequência fotográfica calibrada. A imagem denominada
-posterior não permite estabelecer, sozinha, orientação anatômica e medidas de
-profundidade. As partes ocultas precisarão de aproximação explícita.
+Tudo funciona no front-end. Não há Blender, GLB externo, conversão automática
+de PNG em malha, serviços de geração em execução ou backend.
 
-## Observações e decisões
+## Referências
 
-A referência principal mostra uma silhueta vertical reniforme, convexa à direita
-da imagem e côncava à esquerda. A cápsula vermelha envolve uma faixa cortical
-salmão. Sete pirâmides visíveis convergem para o sistema coletor claro. A região
-central possui tecido amarelo e vasos vermelhos e azuis. Esses são elementos
-observados; espessuras e coordenadas da futura malha serão escolhas de modelagem.
+As sete imagens em `references/rim/` orientam a forma e a distribuição visual:
 
-O modelo será uma representação didática em corte, construída com TypeScript e
-Three.js. Não será uma reconstrução clínica nem uma conversão automática de PNG
-para GLB. O número de pirâmides visíveis não representa uma contagem universal.
+| Arquivo                           | Uso                             |
+| --------------------------------- | ------------------------------- |
+| `rim-base-corte-tres-quartos.png` | Volume e corte principais       |
+| `rim-base-corte-interno.png`      | Distribuição das estruturas     |
+| `rim-base-sistema-coletor.png`    | Cálices e pelve                 |
+| `rim-base-hilo.png`               | Passagem dos vasos              |
+| `rim-base.png`                    | Silhueta externa                |
+| `rim-base-frontal.png`            | Comparação frontal              |
+| `rim-base-posterior.png`          | Superfície externa complementar |
 
-### Identificadores compartilhados
+As imagens não são vistas calibradas. Profundidade, espessuras e partes ocultas
+são aproximações de modelagem. Não se afirma lateralidade anatômica.
 
-Use os identificadores de `src/types/kidney.ts` em grupos 3D, conteúdo e seleção.
-Cada grupo semântico precisa conter a geometria que sua descrição apresenta.
+O corte contém cápsula, córtex, medula com sete pirâmides ilustrativas, colunas,
+papilas, cálices menores e maiores, pelve, seio renal, artéria, veia e ureter.
+As colunas são extensões corticais; as papilas representam ápices das pirâmides.
+O tecido central representa a região do seio renal, não um reservatório de urina.
+A quantidade de pirâmides visíveis não é uma contagem universal.
 
-| Identificador    | Região e representação planejada                             |
-| ---------------- | ------------------------------------------------------------ |
-| `renal-capsule`  | Casca contínua com espessura e borda do corte                |
-| `renal-cortex`   | Faixa periférica com volume                                  |
-| `renal-medulla`  | Conjunto das pirâmides; uma única seleção semântica          |
-| `renal-columns`  | Extensões corticais entre as pirâmides                       |
-| `renal-papillae` | Ápices conectados às pirâmides                               |
-| `minor-calyces`  | Cálices abertos envolvendo os ápices                         |
-| `major-calyces`  | Ramos que recebem os cálices menores                         |
-| `renal-pelvis`   | Funil contínuo entre os ramos e o ureter                     |
-| `renal-sinus`    | Região central; destacar o tecido de suporte, não um tampão  |
-| `renal-artery`   | Vaso vermelho com ramificações e extremidade aberta          |
-| `renal-vein`     | Vaso azul com volume e extremidade aberta                    |
-| `ureter`         | Continuação tubular da pelve, com luz visível na extremidade |
+## Interação
 
-As colunas pertencem ao córtex. Medula e pirâmides não serão duas camadas
-sobrepostas. Papilas são extremidades das pirâmides, não peças soltas. O hilo é
-uma região de passagem e poderá ser encontrado pela busca do seio renal;
-não será representado como um órgão adicional.
+Selecione pelo modelo ou pela lista. O restante do modelo escurece sem tornar
+os tecidos transparentes ou deslocar a seleção. **Aproximar** usa os limites
+reais da região; **Isolar** oculta as demais.
 
-## Contrato visual
+**Separar** afasta os grupos para estudo e reenquadra a câmera. Essa separação
+não representa movimento anatômico. **Reunir**, **Restaurar** e a tecla
+`Escape` permitem recuperar o conjunto.
 
-- Construir primeiro a silhueta e a profundidade, depois o interior.
-- Usar superfícies orgânicas contínuas, não uma pilha de placas planas.
-- Manter cápsula, córtex, pirâmides, tecido adiposo e vasos distinguíveis.
-- Usar as cores de `src/content/kidney.ts` como paleta didática inicial.
-- Manter os tecidos opacos; transparência não deve esconder falta de volume.
-- Conectar papilas, cálices, pelve e ureter sem lacunas visíveis nas junções.
-- Modelar aberturas com paredes e interior, não apenas discos escuros.
-- Fazer estriações acompanharem a convergência das pirâmides para as papilas.
-- Agrupar detalhes com sua estrutura para seleção e futura vista separada.
-- Não inferir esquerda/direita anatômica somente pelo nome dos arquivos.
+A busca aceita acentos e sinônimos. A lista continua disponível sem WebGL.
+A entrada usa Anime.js e o hook compartilhado `usePageEntrance`, respeitando
+o preloader e a preferência por movimento reduzido.
 
-As proporções serão relativas. A vista inicial deve tornar o corte legível,
-mantendo margem ao redor do rim, dos vasos e do ureter em desktop e celular.
+## Gerar uma nova miniatura
 
-## Interação e integração previstas
+Inicie a aplicação com `npm run dev`. Em outro terminal, execute:
 
-O estado está em `src/store/kidneyStore.ts`. Ele não depende da geometria.
+```sh
+npm run capture:rim
+```
 
-- Selecionar pelo modelo ou pela lista deve atualizar a mesma estrutura.
-- Destacar a seleção sem deslocar ou aumentar a peça e romper suas conexões.
-- Isolar apenas a estrutura selecionada e permitir restaurar o conjunto.
-- Ao trocar uma seleção isolada, mostrar o conjunto e restaurar o enquadramento.
-- Não aceitar hover de peças ocultas pelo isolamento.
-- Calcular a aproximação pelos limites reais da geometria, sem recortes.
-- Manter a lista utilizável quando WebGL não estiver disponível.
-
-A futura página usará `usePageEntrance<HTMLElement>()` e Anime.js, conforme
-`AGENTS.md`. Aplicar `data-page-enter="fade"` ao visualizador, sem animar as
-geometrias na entrada. Preservar o preloader, movimento reduzido e scrollbar.
-
-Adicionar `/rim` ao catálogo somente depois de validar o modelo. A miniatura
-`public/catalog/rim-modelo.png` será uma captura do próprio Canvas, sem painel,
-cursor, seleção ativa ou preloader. A página terá título, descrição e URL
-canônica próprios; o sitemap já deriva as rotas do catálogo.
+O script abre o Chrome e captura o modelo sem painel, legenda, seleção ou
+preloader. A imagem tem 1000 × 1000 pixels. Execute novamente após mudar o modelo.
+Use `PLAYWRIGHT_BASE_URL` se a aplicação estiver em outro endereço local.
 
 ## Verificação
 
-Execute os testes da base com:
-
 ```sh
 npm run test:kidney
+npm run test:browser
 npm run lint
 npx tsc --noEmit
+npm run build
 ```
 
-Antes de disponibilizar o módulo completo:
+Os testes de navegador usam Chrome instalado e iniciam o servidor de
+desenvolvimento quando necessário. `PLAYWRIGHT_BASE_URL` permite testar um
+servidor já iniciado. Em CI, o navegador executa sem janela.
 
-- [ ] Validar a especificação de construção do modelo.
-- [ ] Revisar a silhueta e a profundidade em vistas frontal, lateral e posterior.
-- [ ] Revisar o corte e as conexões internas em vista de três quartos.
-- [ ] Confirmar que todas as 12 estruturas possuem geometria selecionável.
-- [ ] Testar seleção, aproximação, isolamento e restauração no navegador.
-- [ ] Testar busca, teclado, layout móvel e movimento reduzido.
-- [ ] Medir geometria e chamadas de desenho na cena real.
-- [ ] Capturar a miniatura, integrar catálogo e metadados, e executar build.
+Na revisão desta versão:
 
-## Conteúdo e limites
+- 10 testes de conteúdo e estado passaram.
+- 4 testes no navegador cobriram as 12 seleções, aproximação, isolamento,
+  restauração, separação, catálogo, busca, layout móvel e fallback sem WebGL.
+- O clique direto no vaso azul selecionou a veia renal.
+- O renderer registrou 53.592 triângulos e 12 chamadas de desenho.
+- Foram revisadas vistas frontal, laterais e posterior, além da página móvel.
+- O modelo preserva 12 grupos selecionáveis e separáveis, sem meshes anônimas.
 
-Os textos em `src/content/kidney.ts` são sínteses introdutórias próprias com
-links para as fontes consultadas. Não substituem revisão por um profissional
-de anatomia. Néfrons individuais, histologia, suprarrenal e doenças ficam fora
-desta primeira representação macroscópica.
+A renderização ocorre sob demanda, com DPR limitado a 1,5. O custo de desenho
+foi reduzido unindo somente geometrias da mesma região. Não há promessa de FPS
+mínimo em dispositivos não testados.
 
-Fontes de consulta:
+## Limites da avaliação visual
+
+A especificação e o histórico estão em `.img2threejs/`. As capturas e os
+diagnósticos locais estão em `.artifacts/kidney/`, fora do versionamento.
+
+O comparador genérico de cores usa apenas cinco grupos de cores para a imagem
+inteira e reprovou regiões pequenas. Por isso, a paleta passou a ser medida no
+albedo sem iluminação, preservando os mapas e usando a diferença entre o quadro
+completo e o quadro com cada região oculta. O maior delta E 76 foi 2,79, com o
+mesmo limite de 20. Isso verifica a paleta definida no código, **não** a fidelidade
+cromática clínica ou fotográfica.
+
+A checagem amostral de auto-interseções sinalizou superfícies da cápsula,
+córtex, sistema coletor, seio e vasos. Há sobreposições de montagem e a malha
+não é uma união sólida estanque. Esses achados não foram marcados como
+resolvidos. O ciclo de certificação geométrica foi interrompido nesta versão;
+junções mais contínuas e sua nova validação permanecem pendentes.
+
+Não use este modelo para impressão 3D, simulação de fluidos, medidas,
+planejamento clínico ou diagnóstico. Néfrons individuais, histologia,
+suprarrenal e doenças estão fora desta representação macroscópica.
+
+## Fontes do conteúdo
+
+Os textos são sínteses introdutórias próprias e não substituem revisão por um
+profissional de anatomia.
 
 - [NCBI Bookshelf: anatomia dos rins](https://www.ncbi.nlm.nih.gov/books/NBK482385/).
 - [OpenStax: anatomia macroscópica do rim](https://openstax.org/books/anatomy-and-physiology-2e/pages/25-3-gross-anatomy-of-the-kidney).

@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test:kidney": "playwright test tests/kidney.spec.ts"
+    "test:kidney": "playwright test tests/kidney.spec.ts",
+    "test:browser": "playwright test --config playwright.browser.config.ts",
+    "capture:rim": "node scripts/capture-kidney.mjs"
   },
   "engines": {
     "node": ">=20.9.0"

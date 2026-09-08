@@ -1,4 +1,5 @@
 import { organelleIds } from "@/types/cell";
+import { kidneyStructureIds } from "@/types/kidney";
 
 export type CatalogEntry = {
   id: string;
@@ -39,6 +40,28 @@ export const catalog: readonly CatalogEntry[] = [
       "Modelo 3D de um olho humano em corte, com suas estruturas internas visíveis.",
     structureCount: 13,
     keywords: ["olho", "visão", "córnea", "retina", "cristalino", "anatomia"],
+  },
+  {
+    id: "human-kidney",
+    title: "Rim humano",
+    category: "Anatomia humana",
+    description:
+      "Explore o interior do rim e descubra como suas estruturas conduzem a urina.",
+    href: "/rim",
+    image: "/catalog/rim-modelo.png",
+    imageAlt:
+      "Modelo 3D do rim humano em corte, com pirâmides, cálices e vasos visíveis.",
+    structureCount: kidneyStructureIds.length,
+    keywords: [
+      "rim",
+      "rins",
+      "renal",
+      "urinário",
+      "urina",
+      "córtex",
+      "pelve",
+      "anatomia",
+    ],
   },
 ];
 

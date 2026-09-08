@@ -7,11 +7,13 @@ type KidneyState = {
   selectedId: KidneyStructureId | null;
   hoveredId: KidneyStructureId | null;
   isolatedId: KidneyStructureId | null;
+  exploded: boolean;
   resetVersion: number;
   focusVersion: number;
   select: (id: KidneyStructureId | null) => void;
   hover: (id: KidneyStructureId | null) => void;
   toggleIsolation: () => void;
+  toggleExploded: () => void;
   focusSelection: () => void;
   reset: () => void;
 };
@@ -20,6 +22,7 @@ export const useKidneyStore = create<KidneyState>((set) => ({
   selectedId: null,
   hoveredId: null,
   isolatedId: null,
+  exploded: false,
   resetVersion: 0,
   focusVersion: 0,
   select: (selectedId) =>
@@ -55,11 +58,19 @@ export const useKidneyStore = create<KidneyState>((set) => ({
           }
         : {},
     ),
+  toggleExploded: () =>
+    set((state) => ({
+      exploded: !state.exploded,
+      isolatedId: null,
+      hoveredId: null,
+      resetVersion: state.resetVersion + 1,
+    })),
   reset: () =>
     set((state) => ({
       selectedId: null,
       hoveredId: null,
       isolatedId: null,
+      exploded: false,
       resetVersion: state.resetVersion + 1,
     })),
 }));
