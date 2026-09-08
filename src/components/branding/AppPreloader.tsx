@@ -12,13 +12,14 @@ import styles from "./AppPreloader.module.css";
 
 type Phase = "loading" | "revealing" | "complete";
 const MAX_WAIT_MS = 4000;
-const REVEAL_MS = 600;
+const REVEAL_MS = 850;
 
 /** Abertura do documento; o layout preserva seu estado entre as rotas. */
 export function AppPreloader({ children }: { children: ReactNode }) {
   const [phase, setPhase] = useState<Phase>("loading");
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const identityRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const blocked = phase !== "complete";
 
@@ -43,6 +44,10 @@ export function AppPreloader({ children }: { children: ReactNode }) {
     void Promise.allSettled([
       document.fonts.ready,
       logoRef.current?.decode(),
+      // Conclui a entrada da marca antes de iniciar sua saída.
+      ...(identityRef.current?.getAnimations() ?? []).map(
+        (animation) => animation.finished,
+      ),
     ]).then(reveal);
 
     return () => {
@@ -53,28 +58,54 @@ export function AppPreloader({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (phase !== "revealing") return;
+    const overlay = overlayRef.current;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const timeout = window.setTimeout(
-      complete,
-      reducedMotion.matches ? 0 : REVEAL_MS,
+    let cancelled = false;
+    const finish = () => {
+      if (!cancelled) complete();
+    };
+
+    if (!overlay?.animate || reducedMotion.matches) {
+      queueMicrotask(finish);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // O easing pertence à animação inteira, não a cada trecho do percurso.
+    // Mantém a página imóvel e move apenas a camada de abertura.
+    const curtain = overlay.animate(
+      [0, 1 / 3, 2 / 3, 1].map((offset) => ({
+        offset,
+        transform: `translate3d(0, ${-100 * offset}%, 0)`,
+      })),
+      {
+        duration: REVEAL_MS,
+        easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+        fill: "forwards",
+      },
     );
-    return () => window.clearTimeout(timeout);
+    void curtain.finished.then(finish, finish);
+    const onMotionChange = () => {
+      if (reducedMotion.matches) finish();
+    };
+    reducedMotion.addEventListener("change", onMotionChange);
+
+    return () => {
+      cancelled = true;
+      reducedMotion.removeEventListener("change", onMotionChange);
+      curtain.cancel();
+    };
   }, [phase, complete]);
 
   useEffect(() => {
     if (!blocked) return;
     const content = contentRef.current;
     const overlay = overlayRef.current;
-    const previousOverflow = document.body.style.overflow;
-    const previousRootOverflow = document.documentElement.style.overflow;
     if (content) content.inert = true;
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
 
     return () => {
       if (content) content.inert = false;
-      document.body.style.overflow = previousOverflow;
-      document.documentElement.style.overflow = previousRootOverflow;
       if (overlay?.contains(document.activeElement)) {
         content?.focus({ preventScroll: true });
       }
@@ -86,12 +117,7 @@ export function AppPreloader({ children }: { children: ReactNode }) {
       <noscript>
         <style>{"#anatolab-preloader { display: none !important; }"}</style>
       </noscript>
-      <div
-        ref={contentRef}
-        className={styles.content}
-        data-revealing={phase === "revealing" || undefined}
-        tabIndex={-1}
-      >
+      <div ref={contentRef} className={styles.content} tabIndex={-1}>
         {children}
       </div>
       {blocked && (
@@ -102,7 +128,7 @@ export function AppPreloader({ children }: { children: ReactNode }) {
           data-phase={phase}
           aria-label="Abertura da Anatolab"
         >
-          <div className={styles.identity}>
+          <div ref={identityRef} className={styles.identity}>
             <div className={styles.logo}>
               <Image
                 ref={logoRef}
