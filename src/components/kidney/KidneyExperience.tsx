@@ -336,7 +336,7 @@ export function KidneyExperience() {
             Rim humano<span>.</span>
           </h1>
           <p data-page-enter="up">
-            Explore o interior do rim e acompanhe o caminho da urina.
+            Explore o interior do rim.
           </p>
         </div>
         <button

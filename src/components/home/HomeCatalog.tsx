@@ -184,11 +184,6 @@ export function HomeCatalog() {
           aria-label="Sobre o acervo"
           data-page-enter="up"
         >
-          <span className={styles.growingLine} />
-          <p>
-            <strong>A célula é só o começo.</strong> Um acervo em construção,
-            com novos caminhos para explorar o corpo humano.
-          </p>
         </aside>
       </main>
 
