@@ -55,14 +55,39 @@ function CameraController() {
     const id = useCellStore.getState().selectedOrganelleId;
 
     if (last.reset !== resetVersion) {
-      const distance = Math.max(
-        3.6 / Math.tan(horizontal),
-        3.22 / Math.tan(vertical),
-      );
-      camera.position.set(0, 0.2, distance);
-      control.target.set(0, 0, 0);
-      control.minDistance = 2;
-      control.maxDistance = Math.max(24, distance * 1.7);
+      const exploded = useCellStore.getState().exploded;
+      if (exploded) {
+        const model = scene.getObjectByName("cell-root");
+        if (model) {
+          model.updateWorldMatrix(true, true);
+          const box = new Box3().setFromObject(model);
+          if (!box.isEmpty()) {
+            const center = box.getCenter(new Vector3());
+            const radius = Math.max(
+              box.getSize(new Vector3()).length() / 2,
+              0.35,
+            );
+            const distance = (radius / Math.sin(halfFov)) * 1.12;
+            control.target.copy(center);
+            camera.position
+              .copy(center)
+              .add(
+                new Vector3(0.4, 0.2, 1).normalize().multiplyScalar(distance),
+              );
+            control.minDistance = Math.max(1, radius * 0.8);
+            control.maxDistance = Math.max(24, distance * 1.7);
+          }
+        }
+      } else {
+        const distance = Math.max(
+          3.6 / Math.tan(horizontal),
+          3.22 / Math.tan(vertical),
+        );
+        camera.position.set(0, 0.2, distance);
+        control.target.set(0, 0, 0);
+        control.minDistance = 2;
+        control.maxDistance = Math.max(24, distance * 1.7);
+      }
     } else if (last.focus !== focusVersion && id) {
       const object = scene.getObjectByName(id);
       if (object) {

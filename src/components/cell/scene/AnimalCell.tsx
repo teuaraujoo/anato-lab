@@ -13,7 +13,11 @@ import {
 
 export function AnimalCell() {
   return (
-    <group rotation={[-0.12, -0.12, -0.08]}>
+    <group
+      name="cell-root"
+      rotation={[-0.12, -0.12, -0.08]}
+      userData={{ modelId: "animal-cell" }}
+    >
       <CellEnvelope />
       <Nucleus />
       <Mitochondria />

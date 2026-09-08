@@ -17,6 +17,7 @@ import {
   Atom,
   Check,
   ChevronRight,
+  Expand,
   Focus,
   Layers3,
   MousePointer2,
@@ -219,7 +220,9 @@ function StructurePanel({
 function ViewerToolbar() {
   const selected = useCellStore((s) => s.selectedOrganelleId);
   const isolated = useCellStore((s) => s.isolatedOrganelleId);
+  const exploded = useCellStore((s) => s.exploded);
   const toggleIsolation = useCellStore((s) => s.toggleIsolation);
+  const toggleExploded = useCellStore((s) => s.toggleExploded);
   const focus = useCellStore((s) => s.focusSelection);
   const reset = useCellStore((s) => s.reset);
   return (
@@ -237,6 +240,15 @@ function ViewerToolbar() {
         <span>Restaurar</span>
       </button>
       <span className="toolbar-divider" />
+      <button
+        className="tool-button"
+        onClick={toggleExploded}
+        aria-pressed={exploded}
+        title="Separação didática das organelas; não representa movimento celular"
+      >
+        <Expand size={17} aria-hidden="true" />
+        <span>{exploded ? "Reunir" : "Separar"}</span>
+      </button>
       <button className="tool-button" onClick={focus} disabled={!selected}>
         <Focus size={17} aria-hidden="true" />
         <span>Aproximar</span>
@@ -267,6 +279,7 @@ export function CellExperience() {
   const selectedId = useCellStore((s) => s.selectedOrganelleId);
   const hoveredId = useCellStore((s) => s.hoveredOrganelleId);
   const isolated = useCellStore((s) => s.isolatedOrganelleId);
+  const exploded = useCellStore((s) => s.exploded);
   const current = hoveredId ?? selectedId;
 
   const openPanel = () => {
@@ -296,7 +309,7 @@ export function CellExperience() {
   }, []);
 
   return (
-    <main ref={rootRef} className="atlas-page">
+    <main ref={rootRef} className="atlas-page separated-explorer">
       <a
         className="skip-link"
         href="#estruturas"
@@ -361,7 +374,11 @@ export function CellExperience() {
               <span className="specimen-label">ANIMAL EUCARIÓTICA</span>
               <span className="stage-badge">
                 <span />
-                {isolated ? "ESTRUTURA ISOLADA" : "VISÃO EM CORTE"}
+                {isolated
+                  ? "ESTRUTURA ISOLADA"
+                  : exploded
+                    ? "SEPARAÇÃO DIDÁTICA"
+                    : "VISÃO EM CORTE"}
               </span>
             </div>
             <div
