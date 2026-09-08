@@ -10,7 +10,7 @@
     "result": "ADMITTED",
     "pHash": "17532757843244525776"
   },
-  "constructionSpec": "pending",
-  "renderReview": "not-started",
-  "geometryImplemented": false
+  "constructionSpec": ".img2threejs/kidney-sculpt-spec.json",
+  "renderReview": "initial-teaching-model delivered; geometric certification stopped with unresolved intersection diagnostics; see docs/kidney.md",
+  "geometryImplemented": true
 }
