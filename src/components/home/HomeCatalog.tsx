@@ -167,8 +167,8 @@ export function HomeCatalog() {
                 <Search size={26} aria-hidden="true" />
                 <h3>Nenhuma exploração encontrada</h3>
                 <p>
-                  O acervo está começando pela célula animal. Tente buscar por
-                  “célula” ou “biologia”.
+                  Tente buscar por “célula”, “olho” ou “rim”, ou use um termo
+                  mais geral, como “anatomia”.
                 </p>
                 <button type="button" onClick={clearSearch}>
                   Ver todo o acervo{" "}

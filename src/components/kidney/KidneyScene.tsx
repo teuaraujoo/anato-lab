@@ -1,0 +1,185 @@
+"use client";
+
+import { memo, useEffect, useRef, useState } from "react";
+import { Canvas, events, useThree } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { Box3, MathUtils, PerspectiveCamera, Vector3 } from "three";
+import { KidneyModel } from "./scene/KidneyModel";
+import { useKidneyStore } from "@/store/kidneyStore";
+
+const INITIAL_CAMERA = {
+  position: [5.1, 1.2, 8.7] as [number, number, number],
+  fov: 38,
+  near: 0.05,
+  far: 100,
+};
+const GL_OPTIONS = { antialias: true, alpha: true };
+const DPR: [number, number] = [1, 1.5];
+
+const visibleEvents: typeof events = (state) => ({
+  ...events(state),
+  filter: (items) =>
+    items.filter(({ object }) => {
+      for (
+        let current: typeof object | null = object;
+        current;
+        current = current.parent
+      )
+        if (!current.visible) return false;
+      return true;
+    }),
+});
+
+function CameraController() {
+  const controls = useRef<OrbitControlsImpl>(null);
+  const camera = useThree((state) => state.camera) as PerspectiveCamera;
+  const scene = useThree((state) => state.scene);
+  const renderer = useThree((state) => state.gl);
+  const size = useThree((state) => state.size);
+  const invalidate = useThree((state) => state.invalidate);
+  const resetVersion = useKidneyStore((state) => state.resetVersion);
+  const focusVersion = useKidneyStore((state) => state.focusVersion);
+  const previous = useRef({ reset: -1, focus: 0, halfFov: 0 });
+
+  useEffect(() => {
+    const control = controls.current;
+    if (!control || !size.width || !size.height) return;
+    const vertical = MathUtils.degToRad(camera.fov) / 2;
+    const horizontal = Math.atan(
+      (Math.tan(vertical) * size.width) / size.height,
+    );
+    const halfFov = Math.min(vertical, horizontal);
+    const last = previous.current;
+    const id = useKidneyStore.getState().selectedId;
+    if (last.reset !== resetVersion) {
+      const distance = Math.max(
+        3.0 / Math.tan(horizontal),
+        3.6 / Math.tan(vertical),
+      );
+      camera.position.set(distance * 0.26, distance * 0.06, distance * 0.964);
+      control.target.set(0, 0, 0);
+      control.minDistance = 3;
+      control.maxDistance = Math.max(24, distance * 1.7);
+      if (useKidneyStore.getState().exploded) {
+        const model = scene.getObjectByName("root");
+        if (model) {
+          model.updateWorldMatrix(true, true);
+          const box = new Box3().setFromObject(model);
+          const center = box.getCenter(new Vector3());
+          const radius = box.getSize(new Vector3()).length() / 2;
+          const expandedDistance = (radius / Math.sin(halfFov)) * 1.1;
+          control.target.copy(center);
+          camera.position
+            .copy(center)
+            .add(
+              new Vector3(0.7, 0.16, 0.7)
+                .normalize()
+                .multiplyScalar(expandedDistance),
+            );
+          control.maxDistance = Math.max(24, expandedDistance * 1.7);
+        }
+      }
+    } else if (last.focus !== focusVersion && id) {
+      const object = scene.getObjectByName(id);
+      if (object) {
+        object.updateWorldMatrix(true, true);
+        const box = new Box3().setFromObject(object);
+        if (!box.isEmpty()) {
+          const center = box.getCenter(new Vector3());
+          const radius = Math.max(
+            box.getSize(new Vector3()).length() / 2,
+            0.35,
+          );
+          const distance = (radius / Math.sin(halfFov)) * 1.15;
+          camera.position.copy(center).add(new Vector3(0, 0.12, distance));
+          control.target.copy(center);
+          control.minDistance = Math.max(0.5, radius * 1.2);
+          control.maxDistance = Math.max(24, distance * 2);
+        }
+      }
+    } else if (last.halfFov) {
+      const offset = camera.position.clone().sub(control.target);
+      offset.multiplyScalar(Math.sin(last.halfFov) / Math.sin(halfFov));
+      camera.position.copy(control.target).add(offset);
+    }
+    previous.current = { reset: resetVersion, focus: focusVersion, halfFov };
+    control.update();
+    if (process.env.NODE_ENV === "development") {
+      Object.assign(window, {
+        __kidneyReview: { scene, camera, control, invalidate, renderer },
+      });
+    }
+    invalidate();
+    return () => {
+      if (process.env.NODE_ENV === "development")
+        Reflect.deleteProperty(window, "__kidneyReview");
+    };
+  }, [
+    camera,
+    scene,
+    renderer,
+    size.width,
+    size.height,
+    resetVersion,
+    focusVersion,
+    invalidate,
+  ]);
+
+  return (
+    <OrbitControls
+      ref={controls}
+      makeDefault
+      enablePan={false}
+      enableDamping={false}
+    />
+  );
+}
+
+function KidneyScene() {
+  const [webglAvailable] = useState(() => {
+    try {
+      const context = document.createElement("canvas").getContext("webgl2");
+      if (!context) return false;
+      context.getExtension("WEBGL_lose_context")?.loseContext();
+      return true;
+    } catch {
+      return false;
+    }
+  });
+  if (!webglAvailable)
+    return (
+      <div className="scene-message" role="status">
+        <p>Não foi possível iniciar o visualizador 3D.</p>
+        <p>Você pode continuar pela lista de estruturas.</p>
+      </div>
+    );
+  return (
+    <Canvas
+      frameloop="demand"
+      camera={INITIAL_CAMERA}
+      dpr={DPR}
+      events={visibleEvents}
+      gl={GL_OPTIONS}
+      fallback={
+        <div className="scene-message">
+          O 3D não está disponível neste dispositivo.
+        </div>
+      }
+    >
+      <ambientLight intensity={0.65} />
+      <hemisphereLight args={["#ffffff", "#333333", 0.6]} />
+      <directionalLight position={[-3, 5, 7]} intensity={1.8} color="#fff4eb" />
+      <directionalLight position={[4, -1, 3]} intensity={0.5} color="#ffffff" />
+      <directionalLight
+        position={[4, 3, -5]}
+        intensity={1.15}
+        color="#b9ddd7"
+      />
+      <KidneyModel />
+      <CameraController />
+    </Canvas>
+  );
+}
+
+export default memo(KidneyScene);
