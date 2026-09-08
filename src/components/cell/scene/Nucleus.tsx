@@ -32,40 +32,47 @@ export function Nucleus() {
     [],
   );
   return (
-    <>
-      <Selectable id="nucleus">
-        <group position={cellBlueprint.nucleus.position}>
-          <mesh geometry={shell}>
-            <Surface id="nucleus" />
-          </mesh>
-          <mesh geometry={rim}>
-            <Surface id="nucleus" color="#d2b6f2" />
-          </mesh>
-          {chromatin.map((geometry, i) => (
-            <mesh key={i} geometry={geometry}>
-              <Surface id="nucleus" color="#d7b3f4" />
-            </mesh>
-          ))}
-          {Array.from({ length: 14 }, (_, i) => {
-            const a = (i / 14) * Math.PI * 2;
-            return (
-              <mesh
-                key={i}
-                position={[Math.cos(a) * 0.83, Math.sin(a) * 0.83, 0.31]}
-              >
-                <torusGeometry args={[0.045, 0.014, 6, 14]} />
-                <Surface id="nucleus" color="#7450a4" />
-              </mesh>
-            );
-          })}
-        </group>
-      </Selectable>
-      <Selectable id="nucleolus">
-        <mesh position={cellBlueprint.nucleolus.position}>
-          <sphereGeometry args={[0.3, 32, 24]} />
-          <Surface id="nucleolus" color="#7546a5" roughness={0.72} />
+    <Selectable id="nucleus">
+      <group position={cellBlueprint.nucleus.position}>
+        <mesh geometry={shell}>
+          <Surface id="nucleus" />
         </mesh>
-      </Selectable>
-    </>
+        <mesh geometry={rim}>
+          <Surface id="nucleus" color="#d2b6f2" />
+        </mesh>
+        {chromatin.map((geometry, i) => (
+          <mesh key={i} geometry={geometry}>
+            <Surface id="nucleus" color="#d7b3f4" />
+          </mesh>
+        ))}
+        {Array.from({ length: 14 }, (_, i) => {
+          const a = (i / 14) * Math.PI * 2;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(a) * 0.83, Math.sin(a) * 0.83, 0.31]}
+            >
+              <torusGeometry args={[0.045, 0.014, 6, 14]} />
+              <Surface id="nucleus" color="#7450a4" />
+            </mesh>
+          );
+        })}
+        <Selectable id="nucleolus" nested>
+          <mesh
+            position={[
+              cellBlueprint.nucleolus.position[0] -
+                cellBlueprint.nucleus.position[0],
+              cellBlueprint.nucleolus.position[1] -
+                cellBlueprint.nucleus.position[1],
+              cellBlueprint.nucleolus.position[2] -
+                cellBlueprint.nucleus.position[2],
+            ]}
+          >
+            <sphereGeometry args={[0.3, 32, 24]} />
+            <Surface id="nucleolus" color="#7546a5" roughness={0.72} />
+          </mesh>
+        </Selectable>
+      </group>
+    </Selectable>
   );
 }

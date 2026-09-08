@@ -7,11 +7,13 @@ type CellState = {
   selectedOrganelleId: OrganelleId | null;
   hoveredOrganelleId: OrganelleId | null;
   isolatedOrganelleId: OrganelleId | null;
+  exploded: boolean;
   resetVersion: number;
   focusVersion: number;
   select: (id: OrganelleId | null) => void;
   hover: (id: OrganelleId | null) => void;
   toggleIsolation: () => void;
+  toggleExploded: () => void;
   focusSelection: () => void;
   reset: () => void;
 };
@@ -20,6 +22,7 @@ export const useCellStore = create<CellState>((set) => ({
   selectedOrganelleId: null,
   hoveredOrganelleId: null,
   isolatedOrganelleId: null,
+  exploded: false,
   resetVersion: 0,
   focusVersion: 0,
   // Selecionar outra estrutura encerra o isolamento e repõe a câmera.
@@ -51,6 +54,14 @@ export const useCellStore = create<CellState>((set) => ({
           }
         : {},
     ),
+  toggleExploded: () =>
+    set((state) => ({
+      exploded: !state.exploded,
+      // Separar exibe todas as estruturas, sem remover a seleção atual.
+      isolatedOrganelleId: null,
+      hoveredOrganelleId: null,
+      resetVersion: state.resetVersion + 1,
+    })),
   focusSelection: () =>
     set((state) =>
       state.selectedOrganelleId ? { focusVersion: state.focusVersion + 1 } : {},
@@ -60,6 +71,7 @@ export const useCellStore = create<CellState>((set) => ({
       selectedOrganelleId: null,
       hoveredOrganelleId: null,
       isolatedOrganelleId: null,
+      exploded: false,
       resetVersion: state.resetVersion + 1,
     })),
 }));
