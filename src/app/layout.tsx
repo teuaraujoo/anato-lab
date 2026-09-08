@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/config/site";
 import { AppPreloader } from "@/components/branding/AppPreloader";
 import "@fontsource/poppins/latin-400.css";
 import "@fontsource/poppins/latin-500.css";
@@ -6,6 +7,10 @@ import "@fontsource/poppins/latin-600.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
+  applicationName: "Anatolab",
+  category: "education",
+  robots: { index: true, follow: true },
   title: {
     default: "Anatolab | Explore o corpo humano em 3D",
     template: "%s | Anatolab",
