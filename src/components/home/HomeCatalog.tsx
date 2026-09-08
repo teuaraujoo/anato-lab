@@ -6,7 +6,7 @@ import { ArrowUpRight, Box, Search, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { searchCatalog } from "@/content/catalog";
 import styles from "./HomeCatalog.module.css";
-import { useHomeEntrance } from "./useHomeEntrance";
+import { usePageEntrance } from "@/components/motion/usePageEntrance";
 
 function CardAction() {
   const { pending } = useLinkStatus();
@@ -19,7 +19,7 @@ function CardAction() {
 }
 
 export function HomeCatalog() {
-  const rootRef = useHomeEntrance();
+  const rootRef = usePageEntrance();
   const [query, setQuery] = useState("");
   const searchInput = useRef<HTMLInputElement>(null);
   const entries = searchCatalog(query);
@@ -35,7 +35,7 @@ export function HomeCatalog() {
       <a className="skip-link" href="#acervo">
         Ir para o acervo
       </a>
-      <header className={styles.header} data-home-enter="header">
+      <header className={styles.header} data-page-enter="down">
         <Link href="/" className={styles.logo} aria-label="Anatolab — início">
           {/* Enquadra a arte original sem alterar o arquivo da logo. */}
           <Image
@@ -85,15 +85,15 @@ export function HomeCatalog() {
 
       <main className={styles.main}>
         <section className={styles.hero} aria-labelledby="home-title">
-          <p className={styles.eyebrow} data-home-enter="eyebrow">
+          <p className={styles.eyebrow} data-page-enter="up">
             <span /> UM NOVO OLHAR PARA A ANATOMIA
           </p>
-          <h1 id="home-title" data-home-enter="title">
+          <h1 id="home-title" data-page-enter="up">
             O corpo humano,
             <br />
             <span>em outra dimensão.</span>
           </h1>
-          <p className={styles.introduction} data-home-enter="description">
+          <p className={styles.introduction} data-page-enter="up">
             Um espaço para descobrir, visualizar e entender a vida.{" "}
             <br className={styles.desktopBreak} />
             Explore estruturas em 3D, no seu ritmo e por todos os ângulos.
@@ -106,10 +106,7 @@ export function HomeCatalog() {
           aria-labelledby="collection-title"
           tabIndex={-1}
         >
-          <div
-            className={styles.collectionHeading}
-            data-home-enter="collection"
-          >
+          <div className={styles.collectionHeading} data-page-enter="up">
             <h2 id="collection-title">
               {hasQuery ? "Resultados da busca" : "Explore o acervo"}
             </h2>
@@ -121,7 +118,7 @@ export function HomeCatalog() {
             </p>
           </div>
 
-          <div id="catalog-results" data-home-enter="catalog">
+          <div id="catalog-results" data-page-enter="up">
             {entries.length ? (
               <div className={styles.grid}>
                 {entries.map((entry) => (
@@ -185,7 +182,7 @@ export function HomeCatalog() {
         <aside
           className={styles.growing}
           aria-label="Sobre o acervo"
-          data-home-enter="about"
+          data-page-enter="up"
         >
           <span className={styles.growingLine} />
           <p>
@@ -195,7 +192,7 @@ export function HomeCatalog() {
         </aside>
       </main>
 
-      <footer className={styles.footer} data-home-enter="footer">
+      <footer className={styles.footer} data-page-enter="up">
         <span>
           Anatolab <span className={styles.footerDot}>·</span> Explorar para
           entender.

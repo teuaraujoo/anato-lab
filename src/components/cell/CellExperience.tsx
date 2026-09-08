@@ -32,6 +32,7 @@ import {
   searchStructures,
 } from "@/content/animalCell";
 import { useCellStore } from "@/store/cellStore";
+import { usePageEntrance } from "@/components/motion/usePageEntrance";
 
 const CellScene = dynamic(() => import("./CellScene"), {
   ssr: false,
@@ -254,6 +255,7 @@ function ViewerToolbar() {
 }
 
 export function CellExperience() {
+  const rootRef = usePageEntrance<HTMLElement>();
   const compact = useSyncExternalStore(
     subscribeCompactLayout,
     getCompactLayout,
@@ -294,7 +296,7 @@ export function CellExperience() {
   }, []);
 
   return (
-    <main className="atlas-page">
+    <main ref={rootRef} className="atlas-page">
       <a
         className="skip-link"
         href="#estruturas"
@@ -305,26 +307,31 @@ export function CellExperience() {
       >
         Ir para a lista de estruturas
       </a>
-      <nav className="explorer-navigation" aria-label="Navegação do explorador">
+      <nav
+        className="explorer-navigation"
+        aria-label="Navegação do explorador"
+        data-page-enter="down"
+      >
         <Link href="/">
           <ArrowLeft size={15} aria-hidden="true" /> Voltar ao acervo
         </Link>
       </nav>
       <div className="page-intro" id="explorador">
         <div>
-          <p className="eyebrow">
+          <p className="eyebrow" data-page-enter="up">
             BIOLOGIA CELULAR <span>/</span> 01
           </p>
-          <h1>
+          <h1 data-page-enter="up">
             Célula animal<span>.</span>
           </h1>
-          <p>
+          <p data-page-enter="up">
             Gire, aproxime e descubra as estruturas que tornam a vida possível.
           </p>
         </div>
         <button
           ref={panelTrigger}
           className="intro-link"
+          data-page-enter="up"
           aria-controls="estruturas"
           aria-expanded={panelOpen}
           onClick={() => (panelOpen ? closePanel() : openPanel())}
@@ -341,6 +348,7 @@ export function CellExperience() {
         >
           <div
             className={`viewer-stage${panelOpen ? " panel-is-open" : ""}`}
+            data-page-enter="fade"
             style={
               {
                 "--structure-color": current
@@ -373,20 +381,20 @@ export function CellExperience() {
             <ViewerToolbar />
             <StructurePanel isOpen={panelOpen} onClose={closePanel} />
           </div>
-          <div className="viewer-footnote">
+          <div className="viewer-footnote" data-page-enter="up">
             <span>
               <MousePointer2 size={14} aria-hidden="true" />
               Arraste para girar · use a roda ou dois dedos para zoom
             </span>
             <span>ESC para restaurar</span>
           </div>
-          <p className="model-note">
+          <p className="model-note" data-page-enter="up">
             Modelo didático em corte. Cores, proporções e quantidades são
             ilustrativas.
           </p>
         </section>
       </div>
-      <footer className="site-footer">
+      <footer className="site-footer" data-page-enter="up">
         <span>EXPLORAR PARA ENTENDER</span>
         <span>Biologia em outra dimensão.</span>
       </footer>

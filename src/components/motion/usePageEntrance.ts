@@ -4,9 +4,9 @@ import { createScope, createTimeline, utils } from "animejs";
 import { useLayoutEffect, useRef } from "react";
 import { usePreloaderReady } from "@/components/branding/PreloaderContext";
 
-/** Prepara a home sob a cortina e só inicia a sequência após sua remoção. */
-export function useHomeEntrance() {
-  const rootRef = useRef<HTMLDivElement>(null);
+/** Entrada compartilhada: aguarda o preloader e não reinicia ao interagir. */
+export function usePageEntrance<T extends HTMLElement = HTMLDivElement>() {
+  const rootRef = useRef<T>(null);
   const ready = usePreloaderReady();
 
   useLayoutEffect(() => {
@@ -27,7 +27,7 @@ export function useHomeEntrance() {
     };
 
     scope.add(() => {
-      const targets = root.querySelectorAll<HTMLElement>("[data-home-enter]");
+      const targets = root.querySelectorAll<HTMLElement>("[data-page-enter]");
       // Somente estilos aplicados via JS: sem JS a página continua visível.
       utils.set(targets, { opacity: 0 });
       root.dataset.entrance = ready ? "playing" : "waiting";
@@ -38,12 +38,14 @@ export function useHomeEntrance() {
       });
 
       targets.forEach((target, index) => {
-        const header = target.dataset.homeEnter === "header";
+        const direction = target.dataset.pageEnter;
         timeline.add(
           target,
           {
             opacity: [0, 1],
-            y: [header ? -12 : 20, 0],
+            ...(direction === "fade"
+              ? {}
+              : { y: [direction === "down" ? -12 : 20, 0] }),
           },
           Math.min(index * 60, 420),
         );
