@@ -254,6 +254,24 @@ h1 > span {
   background: #9be0c8;
   color: #0a2e28;
 }
+.brain-view-switch {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: -8px 0 24px;
+  color: #9ab6c0;
+  font-size: 12px;
+}
+.brain-view-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.brain-view-switch button[aria-pressed="true"] {
+  background: #b5edd9;
+  color: #10252f;
+}
 .kidney-page .tool-button[aria-pressed="true"]:hover,
 .separated-explorer .tool-button[aria-pressed="true"]:hover {
   background: #b5edd9;
