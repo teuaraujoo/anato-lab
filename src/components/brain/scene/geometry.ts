@@ -90,7 +90,7 @@ function cortex(side: number): BrainPart[] {
           .multiplyScalar(1 / 3);
         // Reflection changes winding; restore it on the contralateral side.
         buckets[lobeAt(center)].push(
-          ...(side > 0 ? tri : [tri[0], tri[2], tri[1]]),
+          ...(side > 0 ? [tri[0], tri[2], tri[1]] : tri),
         );
       }
     }
