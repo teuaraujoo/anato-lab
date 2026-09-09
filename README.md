@@ -29,7 +29,10 @@ de IA durante a navegação e não exige uma chave de acesso da OpenAI.
 ## O que já está disponível
 
 - Célula animal em 3D, construída por código, com 11 tipos de estruturas.
+- Olho e rim humanos em 3D, com suas estruturas externas e internas.
+- Cérebro humano em `/cerebro`, com 12 estruturas, visão externa e vista medial.
 - Rotação, zoom, seleção, aproximação e isolamento das estruturas.
+- Separação didática e destaque da estrutura selecionada.
 - Painel flutuante com busca, explicações, relações e fontes de estudo.
 - Interface responsiva, com navegação por teclado.
 - Acesso aos textos mesmo quando o navegador não consegue exibir o modelo 3D.
@@ -72,7 +75,7 @@ Pretendo adicionar outras partes do corpo humano e ampliar progressivamente
 esse diretório, com modelos, explicações e conteúdos que facilitem a
 visualização e o ensino de anatomia humana.
 
-Entre as possibilidades estão pele, olho, ossos, rins, pulmões e coração.
+Entre as possibilidades estão pele, ossos, pulmões e coração.
 Também quero explorar cortes anatômicos, diferentes níveis de detalhe e
 animações didáticas dos processos do corpo.
 
@@ -87,6 +90,17 @@ visual, não como uma reconstrução anatômica exata.
 As explicações têm fontes de estudo, disponíveis no painel e no
 [arquivo de conteúdo](src/content/animalCell.ts), mas ainda não passaram por
 revisão especializada. O projeto é voltado ao aprendizado, não ao uso clínico.
+
+A exploração do cérebro também inclui cerebelo e tronco encefálico, formando
+uma visão geral simplificada do encéfalo. Os sulcos e os limites dos lobos são
+ilustrativos; os ventrículos em azul representam cavidades preenchidas por líquido.
+Os textos e as fontes estão em [src/content/brain.ts](src/content/brain.ts).
+
+Para verificar o cérebro: `npx playwright test tests/brain.spec.ts` e
+`npm run test:browser -- tests/browser/brain.spec.ts`. Com o servidor local
+iniciado, `node scripts/capture-brain.mjs` atualiza a miniatura do card a partir
+do modelo real. As referências em `references/cerebro` não são necessárias
+para executar a aplicação.
 
 ## Licença
 
