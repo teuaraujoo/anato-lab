@@ -332,7 +332,7 @@ export function HeartExperience() {
       <div className="page-intro" id="explorador">
         <div>
           <p className="eyebrow" data-page-enter="up">
-            ANATOMIA HUMANA <span>/</span> 04
+            ANATOMIA HUMANA <span>/</span> 05
           </p>
           <h1 data-page-enter="up">
             Coração humano<span>.</span>

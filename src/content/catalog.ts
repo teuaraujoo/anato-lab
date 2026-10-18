@@ -1,6 +1,7 @@
 import { organelleIds } from "@/types/cell";
 import { kidneyStructureIds } from "@/types/kidney";
 import { heartStructureIds } from "@/types/heart";
+import { brainStructureIds } from "@/types/brain";
 
 export type CatalogEntry = {
   id: string;
@@ -16,6 +17,28 @@ export type CatalogEntry = {
 
 // Inclua somente explorações implementadas, com uma rota e uma miniatura reais.
 export const catalog: readonly CatalogEntry[] = [
+  {
+    id: "human-brain",
+    title: "Cérebro humano",
+    category: "Anatomia humana",
+    description:
+      "Descubra os hemisférios, os lobos e as estruturas que conectam o sistema nervoso.",
+    href: "/cerebro",
+    image: "/catalog/cerebro-modelo.png",
+    imageAlt:
+      "Modelo 3D do cérebro humano, com lobos coloridos, cerebelo e tronco encefálico.",
+    structureCount: brainStructureIds.length,
+    keywords: [
+      "cérebro",
+      "encefalo",
+      "cerebelo",
+      "neuroanatomia",
+      "nervoso",
+      "lobos",
+      "tálamo",
+      "anatomia",
+    ],
+  },
   {
     id: "animal-cell",
     title: "Célula animal",

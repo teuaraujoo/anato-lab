@@ -1,0 +1,442 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import {
+  Component,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Check,
+  ChevronRight,
+  Eye,
+  Expand,
+  Focus,
+  Layers3,
+  MousePointer2,
+  PanelRightClose,
+  PanelRightOpen,
+  RotateCcw,
+  Search,
+  X,
+} from "lucide-react";
+import {
+  brainContent,
+  brainContentById,
+  searchBrainStructures,
+} from "@/content/brain";
+import { useBrainStore } from "@/store/brainStore";
+import { usePageEntrance } from "@/components/motion/usePageEntrance";
+
+const BrainScene = dynamic(() => import("./BrainScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="scene-message" role="status">
+      <span className="loading-orbit" />
+      Preparando sua exploração…
+    </div>
+  ),
+});
+const compactQuery = "(max-width: 800px)";
+function subscribeCompactLayout(onChange: () => void) {
+  const media = window.matchMedia(compactQuery);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+const getCompactLayout = () => window.matchMedia(compactQuery).matches;
+const getServerLayout = () => false;
+
+class SceneBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? (
+      <div className="scene-message" role="status">
+        <Eye size={36} />
+        <p>Não foi possível iniciar o visualizador 3D.</p>
+        <p>Você pode continuar pela lista de estruturas.</p>
+        <button
+          className="button button-secondary"
+          onClick={() => this.setState({ failed: false })}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    ) : (
+      this.props.children
+    );
+  }
+}
+
+function StructurePanel({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const id = useBrainStore((state) => state.selectedId);
+  const isolated = useBrainStore((state) => state.isolatedId);
+  const select = useBrainStore((state) => state.select);
+  const selected = id ? brainContentById[id] : null;
+  const matches = searchBrainStructures(query);
+  return (
+    <aside
+      id="estruturas"
+      className="study-panel"
+      aria-label="Estruturas do cérebro"
+      hidden={!isOpen}
+    >
+      <div className="panel-heading">
+        <h2>Explore as estruturas</h2>
+        <span className="panel-count">{brainContent.length}</span>
+        <button
+          className="panel-close"
+          aria-label="Recolher painel de estruturas"
+          title="Recolher painel"
+          onClick={onClose}
+        >
+          <PanelRightClose size={18} aria-hidden="true" />
+        </button>
+      </div>
+      <div className="panel-body">
+        <div className="search-box">
+          <Search size={17} aria-hidden="true" />
+          <input
+            type="search"
+            placeholder="Buscar estrutura…"
+            aria-label="Buscar estrutura"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+        <div className="structure-list">
+          {matches.length ? (
+            matches.map((structure, index) => (
+              <button
+                key={structure.id}
+                className="structure-option"
+                aria-pressed={id === structure.id}
+                onClick={() => select(structure.id)}
+              >
+                <span
+                  className="structure-dot"
+                  style={{ background: structure.color }}
+                />
+                <span className="structure-name">{structure.name}</span>
+                {id === structure.id ? (
+                  <Check size={15} aria-hidden="true" />
+                ) : (
+                  <span className="structure-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                )}
+              </button>
+            ))
+          ) : (
+            <p className="empty-search" role="status">
+              Nenhuma estrutura encontrada. Tente outro nome.
+            </p>
+          )}
+        </div>
+        <div className="structure-detail" aria-live="polite" aria-atomic="true">
+          {selected ? (
+            <>
+              <div className="detail-kicker">
+                <span style={{ background: selected.color }} />
+                {isolated ? "ESTRUTURA ISOLADA" : "EM FOCO"}
+                <button
+                  aria-label="Limpar seleção"
+                  title="Limpar seleção"
+                  onClick={() => select(null)}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <h3>{selected.name}</h3>
+              <p className="detail-summary">{selected.summary}</p>
+              <dl>
+                <dt>Como é formada</dt>
+                <dd>{selected.structure}</dd>
+                <dt>O que faz</dt>
+                <dd>{selected.function}</dd>
+              </dl>
+              <h4>Conecte os conhecimentos</h4>
+              <div className="related-list">
+                {selected.related.map((related) => (
+                  <button key={related} onClick={() => select(related)}>
+                    {brainContentById[related].name}
+                    <ArrowUpRight size={13} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+              <a
+                className="source-link"
+                href={selected.source.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {selected.source.title}
+                <ArrowUpRight size={12} aria-hidden="true" />
+              </a>
+            </>
+          ) : (
+            <div className="detail-intro">
+              <span className="intro-icon">
+                <MousePointer2 size={22} />
+              </span>
+              <h3>Como o cérebro conecta tantas funções?</h3>
+              <p>
+                Selecione uma estrutura no modelo ou na lista para entender como
+                ela participa das redes do sistema nervoso.
+              </p>
+              <button
+                className="text-button"
+                onClick={() => select("frontal-lobe")}
+              >
+                Começar pelo lobo frontal{" "}
+                <ChevronRight size={16} aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function ViewerToolbar() {
+  const selected = useBrainStore((state) => state.selectedId);
+  const isolated = useBrainStore((state) => state.isolatedId);
+  const toggleIsolation = useBrainStore((state) => state.toggleIsolation);
+  const focus = useBrainStore((state) => state.focusSelection);
+  const reset = useBrainStore((state) => state.reset);
+  const exploded = useBrainStore((state) => state.exploded);
+  const toggleExploded = useBrainStore((state) => state.toggleExploded);
+  return (
+    <div
+      className="viewer-toolbar"
+      role="group"
+      aria-label="Controles do modelo"
+    >
+      <button
+        className="tool-button"
+        onClick={reset}
+        title="Restaurar câmera e mostrar o cérebro inteiro"
+      >
+        <RotateCcw size={17} aria-hidden="true" />
+        <span>Restaurar</span>
+      </button>
+      <span className="toolbar-divider" />
+      <button
+        className="tool-button"
+        onClick={toggleExploded}
+        aria-pressed={exploded}
+        title="Separação didática das regiões; não representa movimento anatômico"
+      >
+        <Expand size={17} aria-hidden="true" />
+        <span>{exploded ? "Reunir" : "Separar"}</span>
+      </button>
+      <button className="tool-button" onClick={focus} disabled={!selected}>
+        <Focus size={17} aria-hidden="true" />
+        <span>Aproximar</span>
+      </button>
+      <button
+        className="tool-button"
+        onClick={toggleIsolation}
+        disabled={!selected}
+        aria-pressed={Boolean(isolated)}
+      >
+        <Layers3 size={17} aria-hidden="true" />
+        <span>{isolated ? "Mostrar todas" : "Isolar"}</span>
+      </button>
+    </div>
+  );
+}
+
+export function BrainExperience() {
+  const rootRef = usePageEntrance<HTMLElement>();
+  const compact = useSyncExternalStore(
+    subscribeCompactLayout,
+    getCompactLayout,
+    getServerLayout,
+  );
+  const [panelPreference, setPanelOpen] = useState<boolean | null>(null);
+  const panelOpen = panelPreference ?? !compact;
+  const panelTrigger = useRef<HTMLButtonElement>(null);
+  const selectedId = useBrainStore((state) => state.selectedId);
+  const hoveredId = useBrainStore((state) => state.hoveredId);
+  const isolated = useBrainStore((state) => state.isolatedId);
+  const exploded = useBrainStore((state) => state.exploded);
+  const cutaway = useBrainStore((state) => state.cutaway);
+  const toggleCutaway = useBrainStore((state) => state.toggleCutaway);
+  const current = hoveredId ?? selectedId;
+  const openPanel = () => {
+    setPanelOpen(true);
+    requestAnimationFrame(() =>
+      document
+        .querySelector<HTMLElement>(
+          compact ? "#estruturas .panel-close" : "#estruturas input",
+        )
+        ?.focus({ preventScroll: true }),
+    );
+  };
+  const closePanel = () => {
+    setPanelOpen(false);
+    panelTrigger.current?.focus({ preventScroll: true });
+  };
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") useBrainStore.getState().reset();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      useBrainStore.getState().reset();
+    };
+  }, []);
+  return (
+    <main ref={rootRef} className="atlas-page separated-explorer brain-page">
+      <a
+        className="skip-link"
+        href="#estruturas"
+        onClick={(event) => {
+          event.preventDefault();
+          openPanel();
+        }}
+      >
+        Ir para a lista de estruturas
+      </a>
+      <nav
+        className="explorer-navigation"
+        aria-label="Navegação do explorador"
+        data-page-enter="down"
+      >
+        <Link href="/">
+          <ArrowLeft size={15} aria-hidden="true" /> Voltar ao acervo
+        </Link>
+      </nav>
+      <div className="page-intro" id="explorador">
+        <div>
+          <p className="eyebrow" data-page-enter="up">
+            ANATOMIA HUMANA <span>/</span> 04
+          </p>
+          <h1 data-page-enter="up">
+            Cérebro humano<span>.</span>
+          </h1>
+          <p data-page-enter="up">
+            Explore os hemisférios, os lobos e as estruturas internas.
+          </p>
+        </div>
+        <button
+          ref={panelTrigger}
+          className="intro-link"
+          data-page-enter="up"
+          aria-controls="estruturas"
+          aria-expanded={panelOpen}
+          onClick={() => (panelOpen ? closePanel() : openPanel())}
+        >
+          <PanelRightOpen size={17} aria-hidden="true" />
+          <span>Explorar estruturas</span>
+          <span className="trigger-count">{brainContent.length}</span>
+        </button>
+      </div>
+      <div className="brain-view-switch" data-page-enter="up">
+        <button
+          type="button"
+          className="button button-secondary"
+          onClick={toggleCutaway}
+          aria-pressed={cutaway}
+        >
+          <Layers3 size={16} aria-hidden="true" />{" "}
+          {cutaway ? "Ver exterior" : "Ver interior"}
+        </button>
+        <span>
+          {exploded
+            ? "Estruturas afastadas para facilitar o estudo das relações."
+            : cutaway
+              ? "Hemisfério esquerdo removido para revelar a vista medial."
+              : "Alterne para a vista medial para explorar as estruturas internas."}
+        </span>
+      </div>
+      <div className="explorer-layout">
+        <section
+          className="viewer-column"
+          aria-label="Exploração tridimensional"
+        >
+          <div
+            className={`viewer-stage${panelOpen ? " panel-is-open" : ""}`}
+            data-page-enter="fade"
+            style={
+              {
+                "--structure-color": current
+                  ? brainContentById[current].color
+                  : "#69dbd7",
+              } as CSSProperties
+            }
+          >
+            <div className="stage-header">
+              <span className="specimen-label">SISTEMA NERVOSO</span>
+              <span className="stage-badge">
+                <span />
+                {isolated
+                  ? "ESTRUTURA ISOLADA"
+                  : exploded
+                    ? "SEPARAÇÃO DIDÁTICA"
+                    : cutaway
+                      ? "VISTA MEDIAL"
+                      : "VISÃO EXTERNA"}
+              </span>
+            </div>
+            <div
+              className="scene-container"
+              style={{ cursor: hoveredId ? "pointer" : "grab" }}
+            >
+              <SceneBoundary>
+                <BrainScene />
+              </SceneBoundary>
+            </div>
+            <div className="stage-caption">
+              <span className="caption-dot" />
+              {current
+                ? brainContentById[current].name
+                : "Conexões que tornam a vida possível."}
+            </div>
+            <ViewerToolbar />
+            <StructurePanel isOpen={panelOpen} onClose={closePanel} />
+          </div>
+          <div className="viewer-footnote" data-page-enter="up">
+            <span>
+              <MousePointer2 size={14} aria-hidden="true" />
+              Arraste para girar · use a roda ou dois dedos para zoom
+            </span>
+            <span>ESC para restaurar</span>
+          </div>
+          <p className="model-note" data-page-enter="up">
+            Modelo didático simplificado do encéfalo, incluindo cérebro,
+            cerebelo e tronco encefálico. Cores, sulcos e limites são
+            ilustrativos. Os ventrículos em azul representam cavidades. A
+            separação desloca as estruturas apenas para facilitar o estudo.
+          </p>
+        </section>
+      </div>
+      <footer className="site-footer" data-page-enter="up">
+        <span>EXPLORAR PARA ENTENDER</span>
+        <span>Anatomia em outra dimensão.</span>
+      </footer>
+    </main>
+  );
+}

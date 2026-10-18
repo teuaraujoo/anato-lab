@@ -264,6 +264,7 @@ h1 > span {
   margin: 0 4px;
   background: #3c5057;
 }
+.brain-view-switch,
 .heart-view-switch {
   display: flex;
   align-items: center;
@@ -273,11 +274,13 @@ h1 > span {
   color: #9ab6c0;
   font-size: 12px;
 }
+.brain-view-switch button,
 .heart-view-switch button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
+.brain-view-switch button[aria-pressed="true"],
 .heart-view-switch button[aria-pressed="true"] {
   background: #b5edd9;
   color: #10252f;

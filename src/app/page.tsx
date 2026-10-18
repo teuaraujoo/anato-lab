@@ -4,7 +4,7 @@ import { createPageMetadata } from "@/lib/metadata";
 export const metadata = createPageMetadata({
   title: "Anatolab | Anatomia e biologia celular em 3D",
   description:
-    "Explore célula animal, olho, rim e coração humano em 3D na Anatolab. Conheça estruturas, funções e conexões em um acervo educacional interativo.",
+    "Explore célula animal, olho, rim, cérebro e coração humano em 3D na Anatolab. Conheça estruturas, funções e conexões em um acervo educacional interativo.",
   path: "/",
   image: {
     url: "/branding/anatolab-logo.png",

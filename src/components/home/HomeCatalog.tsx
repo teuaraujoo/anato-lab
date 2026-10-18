@@ -167,8 +167,8 @@ export function HomeCatalog() {
                 <Search size={26} aria-hidden="true" />
                 <h3>Nenhuma exploração encontrada</h3>
                 <p>
-                  Tente buscar por “célula”, “olho”, “rim” ou “coração”, ou use
-                  um termo mais geral, como “anatomia”.
+                  Tente buscar por “célula”, “olho”, “rim”, “cérebro” ou
+                  “coração”, ou use um termo mais geral, como “anatomia”.
                 </p>
                 <button type="button" onClick={clearSearch}>
                   Ver todo o acervo{" "}

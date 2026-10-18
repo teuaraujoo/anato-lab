@@ -30,6 +30,7 @@ de IA durante a navegação e não exige uma chave de acesso da OpenAI.
 
 - Célula animal em 3D, construída por código, com 11 tipos de estruturas.
 - Olho e rim humanos em 3D.
+- Cérebro humano em `/cerebro`, com 12 estruturas, visão externa e vista medial.
 - Coração humano em `/coracao`, com 15 estruturas e vistas externa e interna.
 - Rotação, zoom, seleção, aproximação e isolamento das estruturas.
 - Separação didática das peças e destaque da estrutura selecionada.
@@ -99,6 +100,17 @@ Para verificar o módulo, execute `npx playwright test tests/heart.spec.ts` e
 `npm run test:browser -- tests/browser/heart.spec.ts`. Com o servidor iniciado,
 `node scripts/capture-heart.mjs` atualiza a miniatura com uma captura do modelo
 real. Use `PLAYWRIGHT_BASE_URL` para indicar uma porta diferente da padrão.
+
+A exploração do cérebro também inclui cerebelo e tronco encefálico, formando
+uma visão geral simplificada do encéfalo. Os sulcos e os limites dos lobos são
+ilustrativos; os ventrículos em azul representam cavidades preenchidas por líquido.
+Os textos e as fontes estão em [src/content/brain.ts](src/content/brain.ts).
+
+Para verificar o cérebro: `npx playwright test tests/brain.spec.ts` e
+`npm run test:browser -- tests/browser/brain.spec.ts`. Com o servidor local
+iniciado, `node scripts/capture-brain.mjs` atualiza a miniatura do card a partir
+do modelo real. As referências em `references/cerebro` não são necessárias
+para executar a aplicação.
 
 ## Licença
 
