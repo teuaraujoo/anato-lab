@@ -264,6 +264,24 @@ h1 > span {
   margin: 0 4px;
   background: #3c5057;
 }
+.heart-view-switch {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: -8px 0 24px;
+  color: #9ab6c0;
+  font-size: 12px;
+}
+.heart-view-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.heart-view-switch button[aria-pressed="true"] {
+  background: #b5edd9;
+  color: #10252f;
+}
 .viewer-footnote {
   display: flex;
   justify-content: space-between;

@@ -167,8 +167,8 @@ export function HomeCatalog() {
                 <Search size={26} aria-hidden="true" />
                 <h3>Nenhuma exploração encontrada</h3>
                 <p>
-                  Tente buscar por “célula”, “olho” ou “rim”, ou use um termo
-                  mais geral, como “anatomia”.
+                  Tente buscar por “célula”, “olho”, “rim” ou “coração”, ou use
+                  um termo mais geral, como “anatomia”.
                 </p>
                 <button type="button" onClick={clearSearch}>
                   Ver todo o acervo{" "}
@@ -183,8 +183,7 @@ export function HomeCatalog() {
           className={styles.growing}
           aria-label="Sobre o acervo"
           data-page-enter="up"
-        >
-        </aside>
+        ></aside>
       </main>
 
       <footer className={styles.footer} data-page-enter="up">

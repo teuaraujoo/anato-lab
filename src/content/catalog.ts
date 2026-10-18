@@ -1,5 +1,6 @@
 import { organelleIds } from "@/types/cell";
 import { kidneyStructureIds } from "@/types/kidney";
+import { heartStructureIds } from "@/types/heart";
 
 export type CatalogEntry = {
   id: string;
@@ -60,6 +61,29 @@ export const catalog: readonly CatalogEntry[] = [
       "urina",
       "córtex",
       "pelve",
+      "anatomia",
+    ],
+  },
+  {
+    id: "human-heart",
+    title: "Coração humano",
+    category: "Anatomia humana",
+    description:
+      "Explore as câmaras, as válvulas e os caminhos que conectam o coração à circulação.",
+    href: "/coracao",
+    image: "/catalog/coracao-modelo.png",
+    imageAlt:
+      "Modelo 3D do coração humano, com suas câmaras e grandes vasos coloridos.",
+    structureCount: heartStructureIds.length,
+    keywords: [
+      "coração",
+      "cardíaco",
+      "cardiovascular",
+      "circulação",
+      "átrio",
+      "ventrículo",
+      "válvula",
+      "aorta",
       "anatomia",
     ],
   },

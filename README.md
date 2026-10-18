@@ -29,7 +29,10 @@ de IA durante a navegação e não exige uma chave de acesso da OpenAI.
 ## O que já está disponível
 
 - Célula animal em 3D, construída por código, com 11 tipos de estruturas.
+- Olho e rim humanos em 3D.
+- Coração humano em `/coracao`, com 15 estruturas e vistas externa e interna.
 - Rotação, zoom, seleção, aproximação e isolamento das estruturas.
+- Separação didática das peças e destaque da estrutura selecionada.
 - Painel flutuante com busca, explicações, relações e fontes de estudo.
 - Interface responsiva, com navegação por teclado.
 - Acesso aos textos mesmo quando o navegador não consegue exibir o modelo 3D.
@@ -72,7 +75,7 @@ Pretendo adicionar outras partes do corpo humano e ampliar progressivamente
 esse diretório, com modelos, explicações e conteúdos que facilitem a
 visualização e o ensino de anatomia humana.
 
-Entre as possibilidades estão pele, olho, ossos, rins, pulmões e coração.
+Entre as possibilidades estão pele, ossos e pulmões.
 Também quero explorar cortes anatômicos, diferentes níveis de detalhe e
 animações didáticas dos processos do corpo.
 
@@ -87,6 +90,15 @@ visual, não como uma reconstrução anatômica exata.
 As explicações têm fontes de estudo, disponíveis no painel e no
 [arquivo de conteúdo](src/content/animalCell.ts), mas ainda não passaram por
 revisão especializada. O projeto é voltado ao aprendizado, não ao uso clínico.
+
+O coração é estático nesta etapa. As cores ajudam a distinguir câmaras, vasos
+e válvulas; o corte anterior e a separação simplificam suas relações espaciais.
+Os textos e fontes estão em [src/content/heart.ts](src/content/heart.ts).
+
+Para verificar o módulo, execute `npx playwright test tests/heart.spec.ts` e
+`npm run test:browser -- tests/browser/heart.spec.ts`. Com o servidor iniciado,
+`node scripts/capture-heart.mjs` atualiza a miniatura com uma captura do modelo
+real. Use `PLAYWRIGHT_BASE_URL` para indicar uma porta diferente da padrão.
 
 ## Licença
 
